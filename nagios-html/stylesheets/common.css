@@ -1,0 +1,597 @@
+/* exfoliation: a nagios makeover                                          */
+/* version: 0.7                                                            */
+/* Copyright 2010 Matthew Wall, all rights reserved                        */
+/*                                                                         */
+/* Permission to use, copy, modify, and distribute this software for any   */
+/* purpose with or without fee is hereby granted, provided that the above  */
+/* copyright notice and this permission notice appear in all copies.       */
+
+/*   thanks to jacob.laack for nagiosneat           */
+/*   thanks to nagios authors for a solid base      */
+
+/* these are reference colors for the color scheme:
+
+                color    dark    light   border
+           OK:  green    88d066  cce8cc  777777
+      WARNING:  yellow   ffff00  feffc1  777777
+     CRITICAL:  red      f88888  ffdddd  777777
+      PENDING:  grey     acacac  fefefe  777777
+      UNKNOWN:  orange   ffbb55  ffddaa  777777
+  UNREACHABLE:  orange   ffbb55  ffddaa  777777
+INDETERMINATE:  purple           ddccff  777777
+     PROBLEMS:  blue             aaccff  777777
+
+          ACK:  aaaaaa
+       CUSTOM:  778899
+
+    important:  blue     99aacc          777777
+not important:  blue             aaccff  777777
+
+ table header:  d0d0d0
+     odd rows:  e7e7e7
+    even rows:  f4f2f2
+
+   titles: 12pt
+   body: 10pt
+   table headings: 9pt
+   controls: 9pt
+   data in tables: 8pt or 9pt
+*/
+
+body {
+  margin: 0em;
+  margin: 0.8em 0.8em 2em 0.8em;
+  color: black;
+  background-color: white;
+  font-family: "Microsoft YaHei",arial, verdana, serif;
+  /* font-family: arial, verdana, serif; */
+  font-weight: normal;
+  font-size: 12pt;
+}
+
+table {
+  border: none;
+  margin: 0;
+}
+
+th, td {
+  border: none;
+  padding: 0 2px 0 2px;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+
+a img {
+  border: none;
+}
+a {
+  text-decoration: none;
+  color: #40529b;
+}
+a:hover {
+  text-decoration: underline;
+  color: #3f5bcd;
+}
+a:active {
+  color: #496aef;
+}
+a:visited {
+  color: #2c3763;
+}
+
+
+div.navbarlogo {
+  margin: 0 0 10px 0;
+  margin-left: 15px;
+}
+div.navsection {
+  margin: 5px 0 10px 0;
+}
+div.navsectiontitle {
+  font-size: 13pt;
+  font-weight: bold;
+  padding: 2px;
+  background-color: #efefef;
+  border:1px solid #dddddd;  
+}
+
+div.navsectionlinks {
+  margin: 5px 0 0 0;
+}
+
+ul.navsectionlinks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+ul.navsectionlinks li { 
+  margin: 5px;
+}
+ul.navsectionlinks li a {
+  font-weight: bold;
+  font-size: 11pt;
+  text-decoration: none;
+  padding: 0 0 0 15px;
+ /* background: transparent url(../images/greendot.gif) no-repeat scroll 0 0; */
+
+}
+ul.navsectionlinks li ul {
+  margin: 0px;
+  padding: 0 0 0 30px;
+  list-style: none;
+}
+ul.navsectionlinks li ul li { }
+ul.navsectionlinks li a:hover {
+/*  background: transparent url(../images/orangedot.gif) no-repeat scroll 0 0; */
+color: #8391cd;
+}
+ul.navsectionlinks li ul li a {
+  background: none;
+  padding: 0;
+  font-weight: normal;
+}
+ul.navsectionlinks li ul li a:hover {
+  background: none;
+}
+ul.navsectionlinks li ul li ul {
+  margin: 0px;
+  padding: 0 0 0 15px;
+  list-style: none;
+}
+
+div.navsectionheader {
+  padding: 0;
+  margin: 0;
+}
+div.navsectionheader ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+div.navsectionheader ul li {
+  font-size: 15px;
+  font-weight: bold;
+  padding: 0 0 0 15px;
+  margin:5px;
+}
+div.navsectionheader ul li ul li {
+  font-weight: normal;
+}
+
+.navbarsearch {
+  margin: 5px 0 0 0;
+}
+.navbarsearch fieldset {
+  border: none;
+}
+
+.navbarsearch fieldset legend {
+  font-size: 8pt;
+}
+.navbarsearch input {
+  font-size: 9pt;
+}
+
+
+#splashpage {
+  text-align: center;
+}
+#mainbrandsplash {
+  font-size: 12pt;
+  font-weight: bold;
+  margin: 0 0 35px 0;
+}
+#maincopy {
+  margin: 0 0 15px 0;
+}
+#currentversioninfo {
+  font-size: 12pt;
+}
+#currentversioninfo .product {
+  font-size: 14pt;
+  font-weight: bold;
+}
+#currentversioninfo .version {
+  font-size: 14pt;
+  font-weight: bold;
+}
+#currentversioninfo .releasedate {
+  font-size: 11pt;
+  margin: 5px 0 0 0;
+}
+#currentversioninfo .checkforupdates {
+  font-size: 11pt;
+  font-weight: bold;
+}
+#currentversioninfo .whatsnew {
+  font-size: 11pt;
+  font-weight: bold;
+  margin: 50px 0 0 0;
+}
+#updateversioninfo {
+  margin: 15px auto 35px auto;
+  width: 400px;
+}
+#updateversioninfo div.submessage {
+  clear: left;
+}
+.updatechecksdisabled {
+  background-color: #FF9F9F;
+  border: 1px solid red;
+  padding: 10px;
+}
+.updatechecksdisabled div.warningmessage {
+  font-weight: bold;
+}
+.updateavailable {
+  background-color: #9FD4FF;
+  border: 1px solid blue;
+  padding: 10px;
+}
+.updateavailable div.updatemessage {
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+#splashpage #mainfooter {
+  clear: both;
+  font-size: 8pt;
+  padding-top: 35px;
+  margin: auto;
+  width: 800px;
+}
+#splashpage #mainfooter .disclaimer {
+  margin: auto;
+}
+#splashpage #mainfooter .logos {
+  margin: 15px 0 0 0;
+}
+
+
+
+table.infoBox { width: 100%; }
+td.infoBox { font-size: 12pt; padding: 0 0 1em 0; white-space: nowrap;}
+div.infoBoxTitle { font-size: 14pt; font-weight: bold; margin-bottom: 10px;}
+div.infoBoxBadProcStatus { font-size: 10pt; font-weight: bold; color: red; }
+
+.linkBox { font-size: 10pt; padding: 1px; }
+table.linkBox td { white-space: nowrap; }
+
+.filter      { font-size: 10pt; padding: 1px; }
+.filterTitle { font-size: 11pt; font-weight: bold; }
+.filterName  { font-size: 10pt; text-align: right; font-weight: bold; }
+.filterValue { font-size: 10pt; }
+
+.errorDescription { font-size: 12pt; text-align: center; font-weight: bold; }
+.errorMessage     { font-size: 12pt; text-align: center; font-weight: bold; color: red; }
+.warningMessage   { font-size: 12pt; text-align: center; font-weight: bold; color: red; }
+
+.statusTitle { text-align: center; font-weight: bold; font-size: 12pt; white-space: nowrap; }
+.statusSort  { font-size: 10pt; }
+
+table.data    { padding: 0; }
+th.data       { font-size: 12pt; text-align: left; padding: 0 5px 0 5px; border-bottom: 1px solid #A09A9A; color: #333333; }
+.dataOdd      { font-size: 10pt; background-color: #e7e7e7; padding: 0px 4px 0px 4px; }
+.dataEven     { font-size: 10pt; background-color: #f4f2f2; padding: 0px 4px 0px 4px; }
+.dataTitle    { font-size: 14pt; text-align: center; font-weight: bold; }
+.dataSubTitle { font-size: 12pt; text-align: center; font-weight: bold; }
+
+.optBox             { font-size:  11pt; white-space: nowrap; padding: 2px 0px 0px 0px; }
+.optBoxTitle        { font-size: 12pt; font-weight: bold; text-align: center; }
+.optBoxRequiredItem { font-size:  11pt; text-align: right; padding: 0px 5px 0px 5px; color: red; }
+.optBoxItem         { font-size:  11pt; text-align: right; padding: 0px 5px 0px 5px; }
+.optBoxValue        { font-size:  11pt; }
+
+.optionBoxTitle { font-size: 12pt; text-align: center; font-weight: bold; }
+.optionBox      { font-size: 12pt; padding: 2px; }
+
+.navBoxTitle { font-size: 12pt; font-weight: bold; white-space: nowrap; }
+.navBoxItem  { font-size: 10pt; }
+.navBoxDate  { font-size: 10pt; white-space: nowrap; }
+.navBoxFile  { font-size: 10pt; text-align: center; }
+
+.helpfulHint { font-size: 10pt; font-style: italic; text-align: center; }
+
+.logEntries { font-size: 10pt; white-space: nowrap; }
+
+.dateTimeBreak { font-size: 10pt; font-weight: bold; }
+
+.reportRange    { font-size: 12pt; white-space: nowrap; }
+.reportDuration { font-size:  10pt; white-space: nowrap; }
+.reportTime     { font-size:  10pt; white-space: nowrap; text-align: right; font-style: italic; }
+
+.reportSelectTitle    { font-size: 12pt; text-align: center; font-weight: bold; }
+.reportSelectSubTitle { font-size:  11pt; text-align: right; }
+.reportSelectItem     { font-size:  11pt; }
+.reportSelectTip      { font-size:  10pt; font-style: italic; }
+
+.dateSelectTitle    { font-size: 12pt; text-align: center; font-weight: bold; }
+.dateSelectSubTitle { font-size:  11pt; text-align: right; }
+.dateSelectItem     { font-size:  11pt; }
+
+.popupText { font-size: 10pt; background-color: #eeeeaa; border: 1px solid #777777; padding: 10px 10px 10px 10px; }
+
+.hostImportantProblem      { font-size: 10pt; background-color: #88aadd; border: 1px solid #aaaaaa; padding: 0px 5px 0px 5px; }
+.hostUnimportantProblem    { font-size: 10pt; background-color: #aaccff; border: 1px solid #888888; padding: 0px 5px 0px 5px; }
+
+.serviceImportantProblem   { font-size: 10pt; background-color: #88aadd; border: 1px solid #aaaaaa; padding: 0px 5px 0px 5px; }
+.serviceUnimportantProblem { font-size: 10pt; background-color: #aaccff; border: 1px solid #888888; padding: 0px 5px 0px 5px; }
+
+.outageImportantProblem    { font-size: 10pt; background-color: #88aadd; border: 1px solid #aaaaaa; padding: 0px 5px 0px 5px; }
+.outageUnimportantProblem  { font-size: 10pt; background-color: #aaccff; border: 1px solid #888888; padding: 0px 5px 0px 5px; }
+
+
+/* Some nagios configurations have side.html rather than side.php and define */
+/* a slightly different set of nav elements. */
+.NavBarTitle {
+  font-size: 11pt;
+  font-weight: bold;
+  margin: 5px 0 10px 0;
+  padding: 2px;
+  background-color: #efefef;
+  border: 1px solid #dddddd;
+}
+
+.NavBarItem {
+  font-size: 11pt;
+  font-weight: bold;
+  list-style: none;
+  text-decoration: none;
+  margin: 0;
+  padding: 0 0 0 0;
+}
+
+.NavBarSearchItem {
+  font-size: 11pt;
+}
+
+
+
+#splashboxes {
+  margin: auto;
+  width: 794px;
+}
+
+.splashbox {
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid #AAAAAA;
+  float: left;
+  text-align: left;
+  height: 140px;
+}
+.splashbox h2 {
+  margin: 0;
+  font-size: 12pt;
+}
+.splashbox ul {
+  margin: 0;
+  padding: 5px 5px 5px 15px;
+}
+.splashbox ul li {
+  clear: both;
+}
+
+.splashbox-media {
+  margin: 5px;
+}
+.splashbox3-empty {
+  margin: 5px;
+  border: 1px solid #AAAAAA;
+  width: 238px;
+  height: 150px;
+}
+.splashbox3-full {
+  margin: 5px;
+  width: 240px;
+  height: 152px;
+}
+.splashbox-clear {
+  clear: both;
+}
+
+#splashbox1, #splashbox2, #splashbox4 {
+  width: 250px;
+}
+#splashbox3 {
+  float: left;
+}
+#splashbox5 {
+  width: 500px;
+}
+
+.mytab {
+  width: 100%;
+  margin: 10px 0;
+  background-color: #fff
+}
+
+.mytab tr {
+  transition: all .3s;
+  -webkit-transition: all .3s
+}
+
+
+.mytab th {
+  text-align: left;
+  font-weight: 400
+}
+
+.mytab td, .mytab th{
+  border: 1px solid #e2e2e2
+}
+
+.mytab td, .mytab th {
+  position: relative;
+  padding: 9px 15px;
+  min-height: 20px;
+  line-height: 20px;
+  font-size: 14px
+}
+
+.mytab[lay-even] tr:nth-child(even) {
+  background-color: #f8f8f8
+}
+
+.mytab[lay-skin=line] td, .mytab[lay-skin=line] th {
+  border-width: 0 0 1px
+}
+
+.mytab[lay-skin=row] td, .mytab[lay-skin=row] th {
+  border-width: 0 1px 0 0
+}
+
+.mytab[lay-skin=nob] td, .mytab[lay-skin=nob] th {
+  border: none
+}
+
+.mytab img {
+  max-width: 100px
+}
+
+
+.mytab[lay-size=sm] td, .mytab[lay-size=sm] th {
+  font-size: 12px;
+  padding: 5px 10px
+}
+
+
+.mytab[lay-data] {
+  display: none
+}
+
+
+.mytab[lay-size=lsm] td, .mytab[lay-size=lsm] th {
+  font-size: 12px;
+  padding: 2px 10px;
+}
+
+.mytab[lay-skin=all] td, .mytab[lay-skin=all] th {
+  border: none;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+
+.mytab[lay-skin=com] td, .mytab[lay-skin=com] th {
+  border: none;
+  /* border-right: 2px solid #ffffff; */
+  border-bottom: 2px solid #ffffff;
+}
+
+.my-quote-nm {
+    border-color: #e2e2e2;
+    border-style: solid;
+    border-width: 1px 1px 1px 5px;
+    background: 0 0;
+}
+
+.my-elem-quote {
+  margin-bottom: 10px;
+  margin-left: 0px;
+  padding: 15px;
+  line-height: 22px;
+  border-left: 5px solid #009688;
+  border-radius: 0 2px 2px 0;
+  background-color: #f2f2f2;
+}
+
+.my-bg-black, .my-bg-blue, .my-bg-cyan, .my-bg-green, .my-bg-orange, .my-bg-red {
+  color: #fff !important
+}
+.my-bg-red {
+  background-color: #FF5722 !important
+}
+
+.my-bg-orange {
+  background-color: #FFB800 !important
+}
+
+.my-bg-green {
+  background-color: #009688 !important
+}
+
+.my-bg-cyan {
+  background-color: #2F4056 !important
+}
+
+.my-bg-blue {
+  background-color: #1E9FFF !important
+}
+
+.my-bg-black {
+  background-color: #393D49 !important
+}
+
+.my-bg-gray {
+  background-color: #eee !important;
+  color: #666 !important
+}
+
+.myqou {
+  margin:16px 80px 16px 0px;
+  padding: 15px;
+  line-height: 22px;
+  border-left: 5px solid #009688;
+  border-radius: 0 2px 2px 0;
+  background-color: #f2f2f2;
+  border-color: #e2e2e2;
+  border-style: solid;
+  border-width: 1px 1px 1px 5px;
+  background: 0 0;
+}
+
+
+.my-btn-primary:hover {
+  border-color: #009688;
+  color: #333;
+}
+.my-btn:hover {
+  opacity: .8;
+  filter: alpha(opacity=80);
+  color: #fff;
+}
+.my-btn-primary {
+  border: 1px solid #C9C9C9;
+  background-color: #fff;
+  color: #555;
+}
+.my-btn {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 18px;
+  background-color: #009688;
+  color: #fff;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 14px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.my-btn, .my-input, .my-select, .my-textarea, .my-upload-button {
+  outline: 0;
+  -webkit-appearance: none;
+  transition: all .3s;
+  -webkit-transition: all .3s;
+  box-sizing: border-box;
+}
+.my-btn, .my-disabled, .my-icon, .my-unselect {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+}
+.my-btn, .my-inline, img {
+  vertical-align: middle;
+}
+button, input, optgroup, option, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  outline: 0;
+}
