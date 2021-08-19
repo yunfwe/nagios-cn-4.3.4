@@ -7,7 +7,7 @@
 ![host](hosts.png)
 
 ## 服务
-![server](services.png)
+![server](servers.png)
 
 ## 主机组
 ![group](groups.png)
